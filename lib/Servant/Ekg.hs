@@ -29,6 +29,7 @@ import           Network.HTTP.Types          (Method)
 import           Network.Wai
 import           Servant.API
 import           Servant.Ekg.Internal
+import           Servant.API.Experimental.Auth
 import           System.Metrics
 import qualified System.Metrics.Counter      as Counter
 import qualified System.Metrics.Distribution as Distribution
@@ -186,5 +187,9 @@ instance HasEndpoint (sub :: *) => HasEndpoint (CaptureAll (h :: Symbol) a :> su
     enumerateEndpoints _ = enumerateEndpoints (Proxy :: Proxy sub)
 
 instance HasEndpoint (sub :: *) => HasEndpoint (BasicAuth (realm :: Symbol) a :> sub) where
+    getEndpoint        _ = getEndpoint        (Proxy :: Proxy sub)
+    enumerateEndpoints _ = enumerateEndpoints (Proxy :: Proxy sub)
+
+instance HasEndpoint (sub :: *) => HasEndpoint (AuthProtect t :> sub) where
     getEndpoint        _ = getEndpoint        (Proxy :: Proxy sub)
     enumerateEndpoints _ = enumerateEndpoints (Proxy :: Proxy sub)
